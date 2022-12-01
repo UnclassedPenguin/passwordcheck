@@ -1,3 +1,15 @@
+//-------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------
+//
+// Tyler(UnclassedPenguin) Password Checker - Now in Go! 2022
+//
+// Author: Tyler(UnclassedPenguin)
+//    URL: https://unclassed.ca
+// GitHub: https://github.com/UnclassedPenguin
+//
+//-------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------
+
 package main
 
 import (
@@ -11,13 +23,15 @@ import (
   "encoding/hex"
 )
 
-
+// Takes a string and hashes it to sha-1
 func hashIt(pass string) string {
   hash := sha1.New()
   hash.Write([]byte(pass))
   return hex.EncodeToString(hash.Sum(nil))
 }
 
+// Sends a request to the Have I Been Pwned api and then organizes
+// the response into a slice of strings.
 func getHashes(firstFive string) []string {
   url := "https://api.pwnedpasswords.com/range/" + firstFive
 
@@ -41,6 +55,10 @@ func getHashes(firstFive string) []string {
   return hashesSplit
 }
 
+// Checks the returned list to see if there are any matching
+// The previously hashed password. If a match is found,
+// returns the line. If no match is found, returns an
+// empty string.
 func checkHashes(hashes []string, last string) string {
   last = strings.ToUpper(last)
 
@@ -64,6 +82,7 @@ func main() {
 
   // Hash password using sha-1 then split it into the first five
   // characters, and the remaining characters.
+  // *
   hash := hashIt(password)
   firstFive := hash[0:5]
   last := hash[5:]
@@ -91,3 +110,21 @@ func main() {
   }
 
 }
+
+/*
+ *
+This is the really cool thing about how this works. You hash the password
+on your end, and only send the first five characters of that hash to the 
+Have I Been Pwned api. He then returns back all hashes that has those
+same first five characters. You then compare on your end again if the 
+remaining characters of your hashed password match any of the responses.
+
+In this way, you can check your password without actually having to send 
+it anywhere. It all stays local. Really cool. 
+
+To learn more, and get a way better explanation than what I can give, 
+check out this Computerphile video on Youtube:
+ 
+https://www.youtube.com/watch?v=hhUb5iknVJs
+
+*/
