@@ -1,6 +1,6 @@
 # Password Checker
 
-This program uses the HaveIBeenPwned password api to check if the password given has been leaked in any databreaches that they are aware of.  
+This program uses the HaveIBeenPwned password api to check if the password given has been leaked in any data breaches that they are aware of.  
 
 It's really interesting how the api works, allowing you to check your password without giving it to anyone.  
 
